@@ -1,0 +1,189 @@
+﻿Program.Sub.Preflight.Start
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.Try
+v.Local.sRet.Declare
+v.Local.sOrderNo.Declare
+v.Local.sOrderLine.Declare
+
+F.ODBC.Connection!con.OpenCompanyConnection
+f.Intrinsic.Control.If(v.Caller.hook,=,12440)
+
+	F.Intrinsic.Variable.SetProperty("GAB-MEMO-1","PL",885)
+	F.Intrinsic.Variable.SetProperty("GAB-MEMO-1","PT",100)
+'	F.Intrinsic.Variable.SetProperty("GAB-LBL-1","PW",80)
+	F.Intrinsic.Variable.SetProperty("GAB-MEMO-1","PW",205)
+	F.Intrinsic.Variable.SetProperty("GAB-MEMO-1","PH",70)
+
+'populate hook
+'	F.Intrinsic.Variable.SetProperty("GAB-LBL-1","PL",840)
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-1","PL",835)
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-1","PT",30)
+'	F.Intrinsic.Variable.SetProperty("GAB-LBL-1","PW",80)
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-1","PW",100)
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-1","PH",13)
+	V.Passed.GAB-LBL-1.Set("USER FIELD 1")
+	
+'	F.Intrinsic.Variable.SetProperty("GAB-TEXT-1","PL",925)
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-1","PL",940)
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-1","PT",30)
+'	F.Intrinsic.Variable.SetProperty("GAB-TEXT-1","PW",165)
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-1","PW",150)
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-1","PH",13)
+'	V.Passed.GAB-TEXT-1.Set("TEXT-1")
+'	
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-2","PL",835)
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-2","PT",50)
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-2","PW",100)
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-2","PH",13)
+	V.Passed.GAB-LBL-2.Set("USER FIELD 2")
+'	
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-2","PL",940)
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-2","PT",50)
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-2","PW",150)
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-2","PH",13)
+'	V.Passed.GAB-TEXT-2.Set("TEXT-2")
+'	
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-3","PL",835)
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-3","PT",70)
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-3","PW",100)
+	F.Intrinsic.Variable.SetProperty("GAB-LBL-3","PH",13)
+	V.Passed.GAB-LBL-3.Set("USER FIELD 3")
+'	
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-3","PL",940)
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-3","PT",70)
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-3","PW",150)
+	F.Intrinsic.Variable.SetProperty("GAB-TEXT-3","PH",13)
+'	V.Passed.GAB-TEXT-3.Set("TEXT-3")
+	f.ODBC.Connection!con.ExecuteAndReturn("select top 3 Label from V_OE_USER_FLDS_LN order by KEY_ID",v.Local.sRet)
+	f.Intrinsic.String.Split(v.Local.sRet,"#$#",v.Local.sRet)
+	Function.Intrinsic.Control.If(V.Local.sRet.UBound,>,-1)
+			V.Passed.GAB-LBL-1.Set(v.Local.sRet(0))
+		Function.Intrinsic.Control.If(V.Local.sRet.UBound,>,0)
+			V.Passed.GAB-LBL-2.Set(v.Local.sRet(1))
+			Function.Intrinsic.Control.If(V.Local.sRet.UBound,>,1)
+				V.Passed.GAB-LBL-3.Set(v.Local.sRet(2))
+			Function.Intrinsic.Control.EndIf
+		Function.Intrinsic.Control.EndIf
+	Function.Intrinsic.Control.EndIf
+	
+	'0000204  0010
+'	Variable.Passed.000005
+'	Variable.Passed.000013
+
+f.Intrinsic.Control.elseIf(v.Caller.hook,=,12530)
+	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-1,"LOCK","1")
+	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-2,"LOCK","1")
+	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-3,"LOCK","1")
+	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-MEMO-1,"LOCK","1")
+	V.Passed.GAB-TEXT-1.Set("")
+	V.Passed.GAB-TEXT-2.Set("")
+	V.Passed.GAB-TEXT-3.Set("")
+	V.Passed.GAB-MEMO-1.Set("")
+f.Intrinsic.Control.elseIf(v.Caller.hook,=,12445)
+
+
+''line changed hook
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-1,"LOCK","0")
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-2,"LOCK","0")
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-3,"LOCK","0")
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-MEMO-1,"LOCK","0")
+'	
+	f.Intrinsic.String.LPad(Variable.Passed.000005,"0",7,v.Local.sOrderNo)
+	f.Intrinsic.String.LPad(Variable.Passed.000013,"0",3,v.Local.sOrderLine)
+	f.Intrinsic.String.RPad(v.Local.sOrderLine,"0",4,v.Local.sOrderLine)
+'	f.Intrinsic.String.Build("select user_1,user_2,user_3,v_order_lines.* from v_order_lines where order_no = '{0}' and  record_no = '{1}' and Record_Type = 'L'",v.Local.sOrderNo,v.Local.sOrderLine,v.Local.sRet)
+	f.Intrinsic.String.Build("select T.Part,T.Text,user_1,user_2,user_3,O.* from v_order_lines O left join INV_EXTRA_TEXT T on O.Part = T.Part where order_no = '{0}' and  record_no = '{1}' and Record_Type = 'L'",v.Local.sOrderNo,v.Local.sOrderLine,v.Local.sRet)
+	f.Data.Datatable.CreateFromSQL("DTUserfld","con",v.Local.sRet)
+	f.Intrinsic.Control.If(v.DataTable.DTUserfld.RowCount,>,0)
+		V.Passed.GAB-TEXT-1.Set(V.DataTable.DTUserfld(0).user_1!FieldValTrim)
+		V.Passed.GAB-TEXT-2.Set(V.DataTable.DTUserfld(0).user_2!FieldValTrim)
+		V.Passed.GAB-TEXT-3.Set(V.DataTable.DTUserfld(0).user_3!FieldValTrim)
+		V.Passed.GAB-MEMO-1.Set(V.DataTable.DTUserfld(0).Text!FieldValTrim)
+	f.Intrinsic.Control.EndIf
+	f.Data.Datatable.Close("DTUserfld")
+
+f.Intrinsic.Control.elseIf(v.Caller.hook,=,12455)
+
+''line changed hook
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-1,"LOCK","0")
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-2,"LOCK","0")
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-3,"LOCK","0")
+''	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-MEMO-1,"LOCK","0")
+'	
+	f.Intrinsic.String.LPad(Variable.Passed.000005,"0",7,v.Local.sOrderNo)
+
+'	f.Intrinsic.String.Build("select user_1,user_2,user_3,v_order_lines.* from v_order_lines where order_no = '{0}' and  record_no = '{1}' and Record_Type = 'L'",v.Local.sOrderNo,v.Local.sOrderLine,v.Local.sRet)
+	f.Intrinsic.String.Build("select user_1,user_2,user_3 from v_order_lines where order_no = '{0}' ",v.Local.sOrderNo,v.Local.sRet)
+	f.Data.Datatable.CreateFromSQL("DTUserfld","con",v.Local.sRet)
+	f.Intrinsic.Control.If(v.DataTable.DTUserfld.RowCount,>,0)
+		V.Passed.GAB-TEXT-1.Set(V.DataTable.DTUserfld(0).user_1!FieldValTrim)
+		V.Passed.GAB-TEXT-2.Set(V.DataTable.DTUserfld(0).user_2!FieldValTrim)
+		V.Passed.GAB-TEXT-3.Set(V.DataTable.DTUserfld(0).user_3!FieldValTrim)
+	f.Intrinsic.Control.EndIf
+	f.Data.Datatable.Close("DTUserfld")
+	
+	V.Local.sParam.Declare
+	
+	Function.Global.Inventory.GetGSSPart(v.Passed.000071,v.Passed.000072,V.Local.sParam)
+	f.Intrinsic.String.Build("select Text from INV_EXTRA_TEXT where Part = '{0}' ",V.Local.sParam,v.Local.sRet)
+	f.Data.Datatable.CreateFromSQL("DTUserfld","con",v.Local.sRet)
+	f.Intrinsic.Control.If(v.DataTable.DTUserfld.RowCount,>,0)
+		V.Passed.GAB-MEMO-1.Set(V.DataTable.DTUserfld(0).Text!FieldValTrim)
+	f.Intrinsic.Control.EndIf
+	f.Data.Datatable.Close("DTUserfld")
+	
+f.Intrinsic.Control.elseIf(v.Caller.hook,=,51599)	
+'temp hook dont remove
+	v.Local.sRet.Set("")
+f.Intrinsic.Control.elseIf(v.Caller.hook,=,12511)	
+''postsave
+'	f.Intrinsic.String.LPad(Variable.Passed.000005,"0",7,v.Local.sOrderNo)
+'	f.Intrinsic.String.LPad(Variable.Passed.000013,"0",3,v.Local.sOrderLine)
+'	f.Intrinsic.String.RPad(v.Local.sOrderLine,"0",4,v.Local.sOrderLine)
+'	
+'	f.Intrinsic.String.Build("update order_lines set user_1='{2}',user_2='{3}',user_3='{4}'  where order_no = '{0}' and  record_no = '{1}' and Record_Type = 'L'",v.Local.sOrderNo,v.Local.sOrderLine,v.Passed.GAB-TEXT-1,v.Passed.GAB-TEXT-2,v.Passed.GAB-TEXT-3,v.Local.sRet)
+'	f.ODBC.Connection!con.Execute(v.Local.sRet)
+'	
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-1,"LOCK","1")
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-2,"LOCK","1")
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-3,"LOCK","1")
+'	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-MEMO-1,"LOCK","1")
+	V.Passed.GAB-TEXT-1.Set("")
+	V.Passed.GAB-TEXT-2.Set("")
+	V.Passed.GAB-TEXT-3.Set("")
+	V.Passed.GAB-MEMO-1.Set("")
+f.Intrinsic.Control.EndIf
+f.Intrinsic.Control.CallSub(unload)
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: GCG_6259_SOLnUserFld.g2u{0}{0}Subroutine: {1}{0}Error Occurred {2} with description {3}",V.Ambient.NewLine,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(unload)
+F.Intrinsic.Control.EndTry
+Program.Sub.Main.End
+
+Program.Sub.unload.Start
+F.Intrinsic.Control.Try
+
+	
+F.ODBC.Connection!con.Close
+F.Intrinsic.Control.End
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+		F.Intrinsic.String.Build("Project: GCG_6259_SOLnUserFld.g2u{0}{0}Subroutine: {1}{0}Error Occurred {2} with description {3}",V.Ambient.NewLine,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Local.sError)
+		F.Intrinsic.UI.Msgbox(V.Local.sError)
+		F.Intrinsic.Control.End
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndTry
+Program.Sub.unload.End
+
+Program.Sub.Comments.Start
+${$0$}$Sales Order Line Approval$}$SISCO$}$11/22/2016 3:59:52 PM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This project was designed and coded by team SkyNet on November 22 2016
+${$5$}$2.0.0.0$}$2
+${$6$}$rnair$}$20210524151739327$}$JUGEdtlNdgRUPvge2DQ26bz/1piQWHOnS8ExMY+ZuCxVMeMyHf5ahsNQ2bx3WX11JG6TcY3QehY=
+Program.Sub.Comments.End
